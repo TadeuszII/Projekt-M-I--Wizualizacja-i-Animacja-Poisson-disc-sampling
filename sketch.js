@@ -34,7 +34,10 @@ var rows; // liczba wierszy w gridzie
 
 // ---- Main functions ----
 function setup() {
-    createCanvas(400, 400);
+    //createCanvas(400, 400);
+
+    var myCanvas = createCanvas(width, height);
+    myCanvas.parent('canvas-container');
     background(0);
     strokeWeight(4);
     stroke('white');

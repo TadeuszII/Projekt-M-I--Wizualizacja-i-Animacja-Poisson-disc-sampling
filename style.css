@@ -1,0 +1,120 @@
+/* Główne ustawienia */
+body {
+  margin: 0;
+  padding: 0;
+  background-color: #ffffff; 
+  min-height: 100vh;
+  
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  
+  font-family: sans-serif;
+  color: #ff0000; /* Domyślny kolor tekstu */
+}
+
+/* Foto filii */
+.top-left-img {
+  position: absolute;
+  top: 15px;
+  left: 15px;
+  width: 100px; 
+  height: auto;
+}
+
+/* tytuł */
+.title {
+  color: #ff0000; 
+  margin-bottom: 20px;
+  font-size: 18px;
+}
+
+/* Układ canvasiw */
+#canvases-wrapper {
+  display: flex;
+  gap: 20px;
+  margin-bottom: 15px; /* Niewielki odstęp nad przyciskami */
+}
+
+/* ramka wokoł canvasu */
+.canvas-box canvas {
+  border: 2px solid #ff0000;
+  display: block; 
+}
+
+/* Kontener na przyciski pod canvasem */
+#ui-container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: center;
+}
+
+.control-group {
+  display: flex;
+  gap: 8px; /* Mniejsze odstępy między małymi przyciskami */
+}
+
+/* przyciski */
+.btn {
+  background-color: #ffffff;
+  color: #ff0000;
+  border: 1px solid #ff0000;
+  padding: 4px 10px; /* Znacznie mniejszy padding */
+  font-size: 12px;   /* Mała czcionka */
+  cursor: pointer;
+  border-radius: 2px; /* Minimalne zaokrąglenie */
+}
+
+/* Odwrocenie kolorow po najechaniu */
+.btn:hover {
+  background-color: #ff0000;
+  color: #ffffff;
+}
+
+/* Pole wyboru i tekst  */
+.checkbox-label {
+  color: #ff0000;
+  font-size: 12px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+input[type="checkbox"] {
+  accent-color: #ff0000;
+  cursor: pointer;
+  width: 14px;
+  height: 14px;
+}
+
+
+
+
+/* Grupa suwakow ulozona w rzedzie */
+.slider-group {
+  display: flex;
+  gap: 15px; /* Odstęp między suwakami */
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
+/* Tekst nad suwakiem */
+.slider-label {
+  display: flex;
+  flex-direction: column; /* Tekst nad suwakiem, a sam suwak pod spodem */
+  align-items: center;
+  color: #ff0000;
+  font-size: 11px;
+  font-weight: bold;
+  gap: 4px;
+}
+
+/* Wygląd samego suwaka */
+input[type="range"] {
+  accent-color: #ff0000; 
+  cursor: pointer;
+  width: 100px; 
+}
