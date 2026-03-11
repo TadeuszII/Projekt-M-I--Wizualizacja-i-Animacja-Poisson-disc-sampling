@@ -56,3 +56,89 @@ function setup () {
     // --- Umieszczenie punktu startowego w tablicy aktywnych ---
     active.push(position);
 }
+
+
+function draw () {
+
+    background(0);
+
+
+    // ---- Step 2 While the active list is not empty... ----
+    if (active.length > 0)
+    {
+        var index = random(active.length); // losowanie indeksu z tablicy aktywnych
+        for (var n = 0; n < k; n++)
+        {   
+            
+            var index = floor(random(active.length)); // losowanie indeksu z tablicy aktywnych
+            var position = active[index]; // pobranie punktu z tablicy aktywnych
+            
+
+
+            // var angle = random(TWO_PI); // losowanie kąta
+            // var offsetX = cos(angle); // obliczanie przesunięcia w osi X
+            // var offsetY = sin(angle); // obliczanie przesunięcia w osi Y
+
+            var sample = p5.Vector.random2D(); // losowanie wektora przesunięcia
+            sample.setMag(random(r, 2 * r)); // ustawienie długości wektora przesunięcia
+            //  from the spherical annulus between radius r and 2r 
+
+            sample.add(position); // dodanie przesunięcia do pozycji punktu
+
+
+            var column_position = floor(sample.x / cellSize); // obliczanie kolumny w gridzie
+            var row_position = floor(sample.y / cellSize); // obliczanie wiersza w gridzie
+
+            var czy_punkt_jest_ok = true; //  If a point is adequately far from existing samples
+
+            for ( var i = -1; i <= 1; i++) // -1 spot on the left; 1 spot on the right
+            {
+                for (var j = -1; j <= 1; j++)
+                {
+                    var neighbor = grid[[i + j * columns]];
+                    // --- Sprawdzanie dystancji meidzy punktem a sąsiadem ---
+
+                    if (neighbor != -1) // jeśli sąsiad istnieje
+                    {
+                        var distance = p5.Vecotr.dist(sample, neighbor);
+                        if (distance < r) // jeśli dystans jest mniejszy niż r, to odrzucamy punkt
+                        {
+                            czy_punkt_jest_ok = false;
+                        }
+
+                    }   
+
+                }
+
+
+            }
+
+            if (czy_punkt_jest_ok) // jeśli punkt jest dobry to dodamy go
+            {
+                grid[columns + rows * column_position] = sample; // umieszczenie punktu w gridzie
+                active.push(sample);
+            }
+
+        }
+    }
+
+    for (var i = 0; i < grid.length; i++)
+    {
+        if (grid[i] != -1)
+        {
+            stroke(strokeColor);
+            strokeWeight(strokeWidth);
+
+            point(grid[i].x, grid[i].y);
+        }
+        
+    }
+
+    // --- loop przez aktywne punkty ---
+    for (var i = 0; i < active.length; i++)
+    {
+        stroke('blue');
+        strokeWeight(strokeWidth);
+        point(active[i].x, active[i].y);
+    }
+}
