@@ -8,9 +8,10 @@ var r = 2 // Punkty beda w promieniu 10px od siebie
 var k = 30 // liczba prob przed tym jak odrzucimy punkt
 var width = 400; // szerokość canvasu
 var height = 400; // wysokość canvasu
-var liczba_iteracji = 2; // szybkosc animacji, im większa liczba iteracji, tym szybciej będzie się rysować, ale może być mniej płynna animacja
-
+var liczba_iteracji = 50; // szybkosc animacji, im większa liczba iteracji, tym szybciej będzie się rysować, ale może być mniej płynna animacja
+var ordered = [];  // tablica przechowująca punkty w kolejności ich dodawania do gridu
 // --- Variables for drawing --
+
 
 var strokeColor = 'white' // kolor nieaktywnych punktow
 var colorActive = 'purple' // kolor aktywnych punktow
@@ -37,6 +38,7 @@ function setup() {
     background(0);
     strokeWeight(4);
     stroke('white');
+    colorMode(HSB);
 
     // ---- Step 0: Initialize an n-dimensional background grid... ----
     columns = floor(width / cellSize) // liczba kolumn
@@ -132,6 +134,9 @@ function draw() {
                         grid[column_position + row_position * columns] = sample; // umieszczenie punktu w gridzie
                         active.push(sample);
 
+                        // --- Jest to dla animacji kolorowanie puntkow od kolejnosci ----
+                        ordered.push(sample); // dodanie punktu do tablicy ordered
+
                         break; // one point per frame delte to do it faster
                     }
 
@@ -147,6 +152,7 @@ function draw() {
         }
     }
 
+    // --- biale kolorowanie punktow w gridzie ---
     for (var i = 0; i < grid.length; i++) {
         if (grid[i]) {
             stroke(strokeColor);
@@ -157,11 +163,55 @@ function draw() {
 
     }
 
+
+    // ---- Kolorowanie punktow w gridzie zależnie od ich indeksu ----
+    // for (var i = 0; i < grid.length; i++) {
+    //     if (grid[i]) {
+    //         stroke(i / 100 % 360, 100, 100); // kolor punktu zależny od jego indeksu w gridzie
+    //         strokeWeight(1);
+
+    //         point(grid[i].x, grid[i].y); // rysowanie punktu z gridzie
+    //     }
+
+    // }
+
+
+    // ---- Kolorowanie punktow w tablicy ordered zależnie od ich indeksu ----
+    // for (var i = 0; i < ordered.length; i++) {
+    //     if (ordered[i]) {
+    //         stroke(i % 360, 100, 100); // kolor punktu zależny od jego indeksu w tablicy ordered
+    //         strokeWeight(20);
+
+    //         point(ordered[i].x, ordered[i].y); // rysowanie punktu z tablicy ordered
+    //     }
+
+    // }
+
+    // ---- Kolorowanie punktow w tablicy ordered zależnie od ich indeksu, ale z mniejszą ilością kolorów ----
+    // var a = 0;
+    // for (var i = 0; i < ordered.length; i++) {
+    //     if (ordered[i]) {
+
+    //         if (i % 100 === 0){
+    //             a += 1;
+    //         }
+
+    //         var colorValue = min(a, 359);
+    //         stroke(colorValue, 100, 100); // kolor punktu zależny od jego indeksu w tablicy ordered
+    //         strokeWeight(1);
+
+    //         point(ordered[i].x, ordered[i].y); // rysowanie punktu z tablicy ordered
+    //     }
+
+    // }
+
+
+    
     // --- loop przez aktywne punkty ---
     for (var i = 0; i < active.length; i++) {
         stroke(colorActive);
         strokeWeight(strokeWidth);
         point(active[i].x, active[i].y);
-        console.log(active.length);
+        
     }
 }
