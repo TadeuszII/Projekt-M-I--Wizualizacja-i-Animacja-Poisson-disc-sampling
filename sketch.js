@@ -4,12 +4,13 @@
 
 
 // ---- Varaibles ----
-var r = 10 // Punkty beda w promieniu 10px od siebie
-var k = 20 // liczba prob przed tym jak odrzucimy punkt
+var r = 50 // Punkty beda w promieniu 10px od siebie
+var k = 30 // liczba prob przed tym jak odrzucimy punkt
 
 // --- Variables for drawing --
 
-var strokeColor = 'white' // kolor linii
+var strokeColor = 'white' // kolor nieaktywnych punktow
+var colorActive = 'purple' // kolor aktywnych punktow
 var strokeWidth = 4 // grubość linii
 
 
@@ -75,6 +76,7 @@ function draw() {
 
 
         var found = false; // zmienna pomocnicza do sprawdzania czy znaleźliśmy odpowiedni punkt
+
         for (var n = 0; n < k; n++) {
 
 
@@ -90,7 +92,7 @@ function draw() {
             var column_position = floor(sample.x / cellSize); // obliczanie kolumny w gridzie
             var row_position = floor(sample.y / cellSize); // obliczanie wiersza w gridzie
 
-            if (!grid[column_position + row_position * columns]) { // jeśli w gridzie jest już punkt, to odrzucamy próbę
+            if ( column_position > -1 && row_position > -1 && column_position < (columns) && row_position < (rows) && !grid[column_position + row_position * columns]) { // jeśli w gridzie jest już punkt, to odrzucamy próbę
 
 
                 var czy_punkt_jest_ok = true; //  If a point is adequately far from existing samples
@@ -145,15 +147,16 @@ function draw() {
             stroke(strokeColor);
             strokeWeight(strokeWidth);
 
-            point(grid[i].x, grid[i].y);
+            point(grid[i].x, grid[i].y); // rysowanie punktu z gridzie
         }
 
     }
 
     // --- loop przez aktywne punkty ---
     for (var i = 0; i < active.length; i++) {
-        stroke(255, 0, 255);
+        stroke(colorActive);
         strokeWeight(strokeWidth);
         point(active[i].x, active[i].y);
+        //console.log(active.length);
     }
 }
