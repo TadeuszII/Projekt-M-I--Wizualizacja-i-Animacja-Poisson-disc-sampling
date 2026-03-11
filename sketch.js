@@ -23,21 +23,25 @@ var grid = [] // tablica dwuwymiarowa przechowujaca punkty
 var active = [] // tablica przechowujaca aktywne punkty
 
 
+var columns; // liczba kolumn w gridzie
+var rows; // liczba wierszy w gridzie
+
+
 // ---- Main functions ----
-function setup () {
+function setup() {
     createCanvas(400, 400);
     background(0);
     strokeWeight(4);
     stroke('white');
 
     // ---- Step 0: Initialize an n-dimensional background grid... ----
-    var columns = floor(width / cellSize) // liczba kolumn
-    var rows = floor(height / cellSize) // liczba wierszy
+    columns = floor(width / cellSize) // liczba kolumn
+    rows = floor(height / cellSize) // liczba wierszy
 
     for (var i = 0; i < columns * rows; i++) // the default −1 indicates no sample, a
-        //non-negative integer gives the index of the sample located in a cell.
+    //non-negative integer gives the index of the sample located in a cell.
     {
-        grid[i] = -1;
+        grid[i] = undefined;
     }
 
 
@@ -58,26 +62,23 @@ function setup () {
 }
 
 
-function draw () {
+function draw() {
 
     background(0);
 
 
     // ---- Step 2 While the active list is not empty... ----
-    if (active.length > 0)
-    {
-        var index = random(active.length); // losowanie indeksu z tablicy aktywnych
-        for (var n = 0; n < k; n++)
-        {   
-            
-            var index = floor(random(active.length)); // losowanie indeksu z tablicy aktywnych
-            var position = active[index]; // pobranie punktu z tablicy aktywnych
-            
+    if (active.length > 0) {
+
+        var index = floor(random(active.length)); // losowanie indeksu z tablicy aktywnych
+        var position = active[index]; // pobranie punktu z tablicy aktywnych
 
 
-            // var angle = random(TWO_PI); // losowanie kąta
-            // var offsetX = cos(angle); // obliczanie przesunięcia w osi X
-            // var offsetY = sin(angle); // obliczanie przesunięcia w osi Y
+        var found = false; // zmienna pomocnicza do sprawdzania czy znaleźliśmy odpowiedni punkt
+        for (var n = 0; n < k; n++) {
+
+
+
 
             var sample = p5.Vector.random2D(); // losowanie wektora przesunięcia
             sample.setMag(random(r, 2 * r)); // ustawienie długości wektora przesunięcia
@@ -89,55 +90,69 @@ function draw () {
             var column_position = floor(sample.x / cellSize); // obliczanie kolumny w gridzie
             var row_position = floor(sample.y / cellSize); // obliczanie wiersza w gridzie
 
-            var czy_punkt_jest_ok = true; //  If a point is adequately far from existing samples
+            if (!grid[column_position + row_position * columns]) { // jeśli w gridzie jest już punkt, to odrzucamy próbę
 
-            for ( var i = -1; i <= 1; i++) // -1 spot on the left; 1 spot on the right
-            {
-                for (var j = -1; j <= 1; j++)
+
+                var czy_punkt_jest_ok = true; //  If a point is adequately far from existing samples
+
+                // --- Sprawdzanie sąsiadów w gridzie ---
+                for (var i = -1; i <= 1; i++) // -1 spot on the left; 1 spot on the right
                 {
-                    var neighbor = grid[[i + j * columns]];
-                    // --- Sprawdzanie dystancji meidzy punktem a sąsiadem ---
+                    for (var j = -1; j <= 1; j++) {
+                        // --- Sprawdzanie dystancji meidzy punktem a sąsiadem ---
+                        var index_sasiada = (column_position + i) + (row_position + j) * columns; // obliczanie indeksu sąsiada w gridzie
+                        var neighbor = grid[index_sasiada]; // pobranie sąsiada z gridzie
 
-                    if (neighbor != -1) // jeśli sąsiad istnieje
-                    {
-                        var distance = p5.Vecotr.dist(sample, neighbor);
-                        if (distance < r) // jeśli dystans jest mniejszy niż r, to odrzucamy punkt
+
+                        if (neighbor) // jeśli sąsiad istnieje
                         {
-                            czy_punkt_jest_ok = false;
+                            var distance = p5.Vector.dist(sample, neighbor);
+                            if (distance < r) // jeśli dystans jest mniejszy niż r, to odrzucamy punkt
+                            {
+                                czy_punkt_jest_ok = false;
+                            }
+
                         }
 
-                    }   
+                    }
 
+
+                }
+
+                if (czy_punkt_jest_ok) //  -- jeśli punkt jest dobry to dodamy go --
+                {
+                    found = true; // -- znaleźliśmy odpowiedni punkt --
+
+                    grid[column_position + row_position * columns] = sample; // umieszczenie punktu w gridzie
+                    active.push(sample);
+
+                    break;
                 }
 
 
             }
+        }
 
-            if (czy_punkt_jest_ok) // jeśli punkt jest dobry to dodamy go
-            {
-                grid[columns + rows * column_position] = sample; // umieszczenie punktu w gridzie
-                active.push(sample);
-            }
-
+        if (!found) // -- jezeli nie znaleźliśmy odpowiedniego punktu po k próbach
+        {
+            // --- Jezeeli dojdzi do k-1 prób, to usuwamy punkt z tablicy aktywnych ---
+            active.splice(index, 1); // usunięcie punktu z tablicy aktywnych
         }
     }
 
-    for (var i = 0; i < grid.length; i++)
-    {
-        if (grid[i] != -1)
-        {
+    for (var i = 0; i < grid.length; i++) {
+        if (grid[i]) {
             stroke(strokeColor);
             strokeWeight(strokeWidth);
 
             point(grid[i].x, grid[i].y);
         }
-        
+
     }
 
     // --- loop przez aktywne punkty ---
-    for (var i = 0; i < active.length; i++)
-    {
-        stroke('blue');
+    for (var i = 0; i < active.length; i++) {
+        stroke(255, 0, 255);
         strokeWeight(strokeWidth);
         point(active[i].x, active[i].y);
     }
