@@ -1,29 +1,40 @@
 /// <reference types="p5" />
 
 
-
-
 // ---- Varaibles ----
-var r = 2 // Punkty beda w promieniu 10px od siebie
-var k = 30 // liczba prob przed tym jak odrzucimy punkt
+
+// --- variables for buttons/sliders ---
+
+var btnStartPause;
+var btnReset;
+var btnChangeSize;
+var sliderWidth;
+var sliderHeight;
+var sliderSpeed;
+var isPaused = false; // Flaga do zatrzymywania animacji
+
+// --- variables for drawing ---
+
 var width = 400; // szerokość canvasu
 var height = 400; // wysokość canvasu
-var liczba_iteracji = 50; // szybkosc animacji, im większa liczba iteracji, tym szybciej będzie się rysować, ale może być mniej płynna animacja
 var ordered = [];  // tablica przechowująca punkty w kolejności ich dodawania do gridu
-// --- Variables for drawing --
 
 
 var strokeColor = 'white' // kolor nieaktywnych punktow
 var colorActive = 'purple' // kolor aktywnych punktow
-var strokeWidth = 1 // grubość linii
+var strokeWidth = 3 // grubość linii
 
+// --- variables for algorithm ---
 
+var r = 10 // Punkty beda w promieniu 10px od siebie
+var k = 20 // liczba prob przed tym jak odrzucimy punkt
+var liczba_iteracji = 50; // szybkosc animacji, im większa liczba iteracji, tym szybciej będzie się rysować, ale może być mniej płynna animacja
 
 const n = 2 // liczba wymiarow (demension)
 
 var cellSize = r / Math.sqrt(n) // rozmiar komorki ( formula z artykulu )
 
-// --- Arrays ---
+// -- Arrays --
 var grid = [] // tablica dwuwymiarowa przechowujaca punkty
 var active = [] // tablica przechowujaca aktywne punkty
 
@@ -31,8 +42,87 @@ var active = [] // tablica przechowujaca aktywne punkty
 var columns; // liczba kolumn w gridzie
 var rows; // liczba wierszy w gridzie
 
+// ---- Functions ----
 
-// ---- Main functions ----
+// --- Button functions ---
+
+function togglePause() // -- Funckja pauzy/odpauzowania animacji --
+{
+    isPaused = !isPaused; // Switch
+    if(isPaused)
+    {
+        noLoop(); // Zatrzymuje petla draw()
+    }else
+    {
+        loop(); // Wznawia petla draw()
+    }
+}
+
+
+function resetAlgorithm() // -- Resetowanie wszystkich zmiennych --
+{
+    initPoissonDiscSampling(); // -- funckja ustawia wszstko na deffault --
+    loop(); // Wznawia petla draw() po resecie
+}
+
+function changeCanvasSize()
+{
+    width = parseInt(document.getElementById('width-slider').value);
+    height = parseInt(document.getElementById('height-slider').value);
+
+    resizeCanvas(width, height);
+
+    initPoissonDiscSampling();
+
+}
+
+function initPoissonDiscSampling() // -- funckja ustawia wszstko na deffault --
+{
+    // - Arrays -
+    grid = [] // tablica dwuwymiarowa przechowujaca punkty
+    active = [] // tablica przechowujaca aktywne punkty
+
+    ordered = [];  // tablica przechowująca punkty w kolejności ich dodawania do gridu
+
+    // - variables - 
+
+    cellSize = r / Math.sqrt(n) // rozmiar komorki ( formula z artykulu )
+    columns = floor(width / cellSize) // liczba kolumn
+    rows = floor(height / cellSize) // liczba wierszy
+
+    columns = floor(width / cellSize) // liczba kolumn
+    rows = floor(height / cellSize) // liczba wierszy
+
+    for (var i = 0; i < columns * rows; i++) // the default −1 indicates no sample, a
+    //non-negative integer gives the index of the sample located in a cell.
+    {
+        grid[i] = undefined;
+    }
+
+
+    // - Losowanie punktow startowych -
+    var x = Math.random() * (width);
+    var y = Math.random() * (height);
+    var position = createVector(x, y);
+
+    // - Umieszczenie punktu startowego w gridzie -
+    var i = floor(x / cellSize);
+    var j = floor(y / cellSize);
+
+    if(i >= 0 && i < columns && j >= 0 && j < rows) {
+        grid[i + j * columns] = position; 
+        active.push(position);
+        ordered.push(position);
+    }
+    // var i = floor(x / cellSize);
+    // var j = floor(y / cellSize);
+    // grid[i + j * columns] = position; // umieszczenie punktu startowego w gridzie
+
+}
+
+
+
+// --- Main functions ---
 function setup() {
     //createCanvas(400, 400);
 
@@ -42,7 +132,7 @@ function setup() {
     strokeWeight(4);
     stroke('white');
     colorMode(HSB);
-
+    
     // ---- Step 0: Initialize an n-dimensional background grid... ----
     columns = floor(width / cellSize) // liczba kolumn
     rows = floor(height / cellSize) // liczba wierszy
@@ -68,6 +158,9 @@ function setup() {
 
     // --- Umieszczenie punktu startowego w tablicy aktywnych ---
     active.push(position);
+    ordered.push(position);
+
+    background(0);
 }
 
 
@@ -75,6 +168,7 @@ function draw() {
 
     background(0);
 
+    liczba_iteracji = parseInt(document.getElementById('speed-slider').value); // pobranie wartości z suwaka szybkości
 
     // ---- Step 2 While the active list is not empty... ----
     for (var total = 0; total < liczba_iteracji; total++) { // 5 raza per frame, zeby bylo szybciej, ale mozna usunac i bedzie animacja
@@ -141,6 +235,11 @@ function draw() {
                         ordered.push(sample); // dodanie punktu do tablicy ordered
 
                         break; // one point per frame delte to do it faster
+                    }else
+                    {
+                        stroke('red');
+                        strokeWeight(strokeWidth); // Slightly thicker so you can see them flash
+                        point(sample.x, sample.y);
                     }
 
 
@@ -217,4 +316,26 @@ function draw() {
         point(active[i].x, active[i].y);
         
     }
+
+    
+    if (active.length === 0) {
+
+        background(0);
+
+        for (var i = 0; i < grid.length; i++) {
+        if (grid[i]) {
+            stroke(strokeColor);
+            strokeWeight(strokeWidth);
+
+            point(grid[i].x, grid[i].y); // rysowanie punktu z gridzie
+        }
+
+    }
+
+        noLoop(); // Zatrzymuje petla draw() gdy nie ma już aktywnych punktów
+        
+    }
+
 }
+
+
