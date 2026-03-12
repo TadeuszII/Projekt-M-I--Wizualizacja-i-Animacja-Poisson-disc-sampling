@@ -34,16 +34,65 @@
         <div class="slider-group">
             <label class="slider-label">
                 Szerokość (Width):
-                <input type="range" id="width-slider" min="200" max="1000" value="400">
+                <div class="slider-controls">
+                    <input type="range" id="width-slider" min="200" max="1000" value="400"
+                        oninput="document.getElementById('width-input').value = this.value">
+                    <input type="number" id="width-input" class="num-input" min="200" max="1000" value="400"
+                        oninput="document.getElementById('width-slider').value = this.value">
+                </div>
             </label>
             <label class="slider-label">
                 Wysokość (Height):
-                <input type="range" id="height-slider" min="200" max="1000" value="400">
+                <div class="slider-controls">
+                    <input type="range" id="height-slider" min="200" max="1000" value="400"
+                        oninput="document.getElementById('height-input').value = this.value">
+                    <input type="number" id="height-input" class="num-input" min="200" max="1000" value="400"
+                        oninput="document.getElementById('height-slider').value = this.value">
+                </div>
             </label>
             <label class="slider-label">
                 Szybkość (Iteracje):
-                <input type="range" id="speed-slider" min="1" max="200" value="1">
+                <div class="slider-controls">
+                    <input type="range" id="speed-slider" min="1" max="200" value="1"
+                        oninput="document.getElementById('speed-input').value = this.value">
+                    <input type="number" id="speed-input" class="num-input" min="1" max="200" value="1"
+                        oninput="document.getElementById('speed-slider').value = this.value">
+                </div>
             </label>
+        </div>
+
+        <div class="slider-group">
+            <label class="slider-label">
+                Promień (r):
+                <div class="slider-controls">
+                    <input type="range" id="r-slider" min="2" max="50" value="10"
+                        oninput="document.getElementById('r-input').value = this.value; updateR_And_Parameters()">
+                    <input type="number" id="r-input" class="num-input" min="2" max="50" value="10"
+                        oninput="document.getElementById('r-slider').value = this.value; updateR_And_Parameters()">
+                </div>
+            </label>
+            <label class="slider-label">
+                Próby (k):
+                <div class="slider-controls">
+                    <input type="range" id="k-slider" min="5" max="100" value="20"
+                        oninput="document.getElementById('k-input').value = this.value;">
+                    <input type="number" id="k-input" class="num-input" min="5" max="100" value="20"
+                        oninput="document.getElementById('k-slider').value = this.value;">
+                </div>
+            </label>
+            <label class="slider-label">
+                Grubość (Stroke):
+                <div class="slider-controls">
+                    <input type="range" id="stroke-slider" min="1" max="20" value="5"
+                        oninput="document.getElementById('stroke-input').value = this.value">
+                    <input type="number" id="stroke-input" class="num-input" min="1" max="20" value="5"
+                        oninput="document.getElementById('stroke-slider').value = this.value">
+                </div>
+            </label>
+
+            <div style="display: flex; align-items: flex-end; padding-bottom: 2px;">
+                <button class="btn" onclick="setToDefault()">Default</button>
+            </div>
         </div>
 
         <div class="control-group">

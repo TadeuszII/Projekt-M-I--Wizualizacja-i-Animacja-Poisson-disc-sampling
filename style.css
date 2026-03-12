@@ -118,3 +118,34 @@ input[type="range"] {
   cursor: pointer;
   width: 100px; 
 }
+
+/* Kontener trzymający suwak i pole liczbowe obok siebie */
+.slider-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Prosty wygląd pola liczbowego (w stylu przycisków) */
+.num-input {
+  background-color: #ffffff;
+  color: #ff0000;
+  border: 1px solid #ff0000;
+  padding: 3px 5px;
+  font-size: 12px;
+  border-radius: 2px;
+  width: 45px;
+  text-align: center;
+  outline: none;
+  font-family: sans-serif;
+}
+
+/* Ukrycie domyślnych strzałek góra/dół dla czystszego wyglądu (opcjonalne) */
+.num-input::-webkit-inner-spin-button, 
+.num-input::-webkit-outer-spin-button { 
+  -webkit-appearance: none; 
+  margin: 0; 
+}
+.num-input {
+  -moz-appearance: textfield;
+}

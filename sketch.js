@@ -22,7 +22,7 @@ var ordered = [];  // tablica przechowująca punkty w kolejności ich dodawania 
 
 var strokeColor = 'white' // kolor nieaktywnych punktow
 var colorActive = 'purple' // kolor aktywnych punktow
-var strokeWidth = 3 // grubość linii
+var strokeWidth = r * 0.5 // grubość linii
 
 // --- variables for algorithm ---
 
@@ -49,11 +49,9 @@ var rows; // liczba wierszy w gridzie
 function togglePause() // -- Funckja pauzy/odpauzowania animacji --
 {
     isPaused = !isPaused; // Switch
-    if(isPaused)
-    {
+    if (isPaused) {
         noLoop(); // Zatrzymuje petla draw()
-    }else
-    {
+    } else {
         loop(); // Wznawia petla draw()
     }
 }
@@ -65,8 +63,7 @@ function resetAlgorithm() // -- Resetowanie wszystkich zmiennych --
     loop(); // Wznawia petla draw() po resecie
 }
 
-function changeCanvasSize()
-{
+function changeCanvasSize() {
     width = parseInt(document.getElementById('width-slider').value);
     height = parseInt(document.getElementById('height-slider').value);
 
@@ -78,6 +75,7 @@ function changeCanvasSize()
 
 function initPoissonDiscSampling() // -- funckja ustawia wszstko na deffault --
 {
+    
     // - Arrays -
     grid = [] // tablica dwuwymiarowa przechowujaca punkty
     active = [] // tablica przechowujaca aktywne punkty
@@ -109,8 +107,8 @@ function initPoissonDiscSampling() // -- funckja ustawia wszstko na deffault --
     var i = floor(x / cellSize);
     var j = floor(y / cellSize);
 
-    if(i >= 0 && i < columns && j >= 0 && j < rows) {
-        grid[i + j * columns] = position; 
+    if (i >= 0 && i < columns && j >= 0 && j < rows) {
+        grid[i + j * columns] = position;
         active.push(position);
         ordered.push(position);
     }
@@ -118,6 +116,25 @@ function initPoissonDiscSampling() // -- funckja ustawia wszstko na deffault --
     // var j = floor(y / cellSize);
     // grid[i + j * columns] = position; // umieszczenie punktu startowego w gridzie
 
+}
+
+
+function setToDefault(){ // -- funckja ustawia r, k, color width na deffault --
+
+    document.getElementById('r-input').value = 10;
+    document.getElementById('r-slider').value = 10;
+    document.getElementById('k-input').value = 20;
+    document.getElementById('k-slider').value = 20;
+
+    document.getElementById('stroke-slider').value = (r * 0.5);
+    document.getElementById('stroke-input').value = (r * 0.5);
+
+    updateR_And_Parameters();
+}
+
+function updateR_And_Parameters() { // -- funckja aktualizująca wartosc r --
+    r = parseInt(document.getElementById('r-input').value);
+    resetAlgorithm();
 }
 
 
@@ -132,7 +149,7 @@ function setup() {
     strokeWeight(4);
     stroke('white');
     colorMode(HSB);
-    
+
     // ---- Step 0: Initialize an n-dimensional background grid... ----
     columns = floor(width / cellSize) // liczba kolumn
     rows = floor(height / cellSize) // liczba wierszy
@@ -168,7 +185,16 @@ function draw() {
 
     background(0);
 
+
+    // ---- Pobranie wartosci z suwakow i przyciskow ----
+
+    // --- pobranie wartosci liczby iteracji z suwaka szybkości ---
     liczba_iteracji = parseInt(document.getElementById('speed-slider').value); // pobranie wartości z suwaka szybkości
+
+    // --- pobranie wartosci k z suwaka i inputa ---
+    k = parseInt(document.getElementById('k-input').value); 
+    // --- pobranie wartosci z suwaka grubosci linii ---
+    strokeWidth = parseInt(document.getElementById('stroke-input').value); 
 
     // ---- Step 2 While the active list is not empty... ----
     for (var total = 0; total < liczba_iteracji; total++) { // 5 raza per frame, zeby bylo szybciej, ale mozna usunac i bedzie animacja
@@ -235,8 +261,7 @@ function draw() {
                         ordered.push(sample); // dodanie punktu do tablicy ordered
 
                         break; // one point per frame delte to do it faster
-                    }else
-                    {
+                    } else {
                         stroke('red');
                         strokeWeight(strokeWidth); // Slightly thicker so you can see them flash
                         point(sample.x, sample.y);
@@ -308,32 +333,32 @@ function draw() {
     // }
 
 
-    
+
     // --- loop przez aktywne punkty ---
     for (var i = 0; i < active.length; i++) {
         stroke(colorActive);
         strokeWeight(strokeWidth);
         point(active[i].x, active[i].y);
-        
+
     }
 
-    
+
     if (active.length === 0) {
 
         background(0);
 
         for (var i = 0; i < grid.length; i++) {
-        if (grid[i]) {
-            stroke(strokeColor);
-            strokeWeight(strokeWidth);
+            if (grid[i]) {
+                stroke(strokeColor);
+                strokeWeight(strokeWidth);
 
-            point(grid[i].x, grid[i].y); // rysowanie punktu z gridzie
+                point(grid[i].x, grid[i].y); // rysowanie punktu z gridzie
+            }
+
         }
 
-    }
-
         noLoop(); // Zatrzymuje petla draw() gdy nie ma już aktywnych punktów
-        
+
     }
 
 }
