@@ -63,19 +63,28 @@ function resetAlgorithm() // -- Resetowanie wszystkich zmiennych --
     loop(); // Wznawia petla draw() po resecie
 }
 
-function changeCanvasSize() {
+
+function changeCanvasSize() { // -- funckja zmienia rozmiar canvasu --
+
+    var canvasWithRandomPoints = document.getElementById('show-random').checked;
+
+    if (canvasWithRandomPoints) {
+        alert("Zmiana rozmiaru zablokowana – wyłącz najpierw 'Show Random Point Generation'.");
+        return; // - jezeli checkbox jest zaznaczony, nie zmieniamy rozmiaru canvasu -
+    }
+
     width = parseInt(document.getElementById('width-slider').value);
     height = parseInt(document.getElementById('height-slider').value);
 
     resizeCanvas(width, height);
 
-    initPoissonDiscSampling();
+    initPoissonDiscSampling(); // - funckja ustawia wszstko na deffault -
 
 }
 
 function initPoissonDiscSampling() // -- funckja ustawia wszstko na deffault --
 {
-    
+
     // - Arrays -
     grid = [] // tablica dwuwymiarowa przechowujaca punkty
     active = [] // tablica przechowujaca aktywne punkty
@@ -119,7 +128,7 @@ function initPoissonDiscSampling() // -- funckja ustawia wszstko na deffault --
 }
 
 
-function setToDefault(){ // -- funckja ustawia r, k, color width na deffault --
+function setToDefault() { // -- funckja ustawia r, k, color width na deffault --
 
     document.getElementById('r-input').value = 10;
     document.getElementById('r-slider').value = 10;
@@ -129,7 +138,7 @@ function setToDefault(){ // -- funckja ustawia r, k, color width na deffault --
     document.getElementById('stroke-slider').value = (r * 0.5);
     document.getElementById('stroke-input').value = (r * 0.5);
 
-    updateR_And_Parameters();
+    updateR_And_Parameters(); // -- funckja aktualizujaca r i resetuje algortym  --
 }
 
 function updateR_And_Parameters() { // -- funckja aktualizująca wartosc r --
@@ -192,9 +201,9 @@ function draw() {
     liczba_iteracji = parseInt(document.getElementById('speed-slider').value); // pobranie wartości z suwaka szybkości
 
     // --- pobranie wartosci k z suwaka i inputa ---
-    k = parseInt(document.getElementById('k-input').value); 
+    k = parseInt(document.getElementById('k-input').value);
     // --- pobranie wartosci z suwaka grubosci linii ---
-    strokeWidth = parseInt(document.getElementById('stroke-input').value); 
+    strokeWidth = parseInt(document.getElementById('stroke-input').value);
 
     // ---- Step 2 While the active list is not empty... ----
     for (var total = 0; total < liczba_iteracji; total++) { // 5 raza per frame, zeby bylo szybciej, ale mozna usunac i bedzie animacja
