@@ -2,16 +2,17 @@
 body {
   margin: 0;
   padding: 0;
-  background-color: #ffffff; 
+  background-color: #ffffff;
   min-height: 100vh;
-  
+
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  
+
   font-family: sans-serif;
-  color: #ff0000; /* Domyślny kolor tekstu */
+  color: #ff0000;
+  /* Domyślny kolor tekstu */
 }
 
 /* Foto filii */
@@ -19,13 +20,13 @@ body {
   position: absolute;
   top: 15px;
   left: 15px;
-  width: 100px; 
+  width: 100px;
   height: auto;
 }
 
 /* tytuł */
 .title {
-  color: #ff0000; 
+  color: #ff0000;
   margin-bottom: 20px;
   font-size: 18px;
 }
@@ -34,13 +35,14 @@ body {
 #canvases-wrapper {
   display: flex;
   gap: 20px;
-  margin-bottom: 15px; /* Niewielki odstęp nad przyciskami */
+  margin-bottom: 15px;
+  /* Niewielki odstęp nad przyciskami */
 }
 
 /* ramka wokoł canvasu */
 .canvas-box canvas {
   border: 2px solid #ff0000;
-  display: block; 
+  display: block;
 }
 
 /* Kontener na przyciski pod canvasem */
@@ -53,7 +55,8 @@ body {
 
 .control-group {
   display: flex;
-  gap: 8px; /* Mniejsze odstępy między małymi przyciskami */
+  gap: 8px;
+  /* Mniejsze odstępy między małymi przyciskami */
 }
 
 /* przyciski */
@@ -61,10 +64,13 @@ body {
   background-color: #ffffff;
   color: #ff0000;
   border: 1px solid #ff0000;
-  padding: 4px 10px; /* Znacznie mniejszy padding */
-  font-size: 12px;   /* Mała czcionka */
+  padding: 4px 10px;
+  /* Znacznie mniejszy padding */
+  font-size: 12px;
+  /* Mała czcionka */
   cursor: pointer;
-  border-radius: 2px; /* Minimalne zaokrąglenie */
+  border-radius: 2px;
+  /* Minimalne zaokrąglenie */
 }
 
 /* Odwrocenie kolorow po najechaniu */
@@ -96,7 +102,8 @@ input[type="checkbox"] {
 /* Grupa suwakow ulozona w rzedzie */
 .slider-group {
   display: flex;
-  gap: 15px; /* Odstęp między suwakami */
+  gap: 15px;
+  /* Odstęp między suwakami */
   margin-top: 5px;
   margin-bottom: 5px;
 }
@@ -104,7 +111,8 @@ input[type="checkbox"] {
 /* Tekst nad suwakiem */
 .slider-label {
   display: flex;
-  flex-direction: column; /* Tekst nad suwakiem, a sam suwak pod spodem */
+  flex-direction: column;
+  /* Tekst nad suwakiem, a sam suwak pod spodem */
   align-items: center;
   color: #ff0000;
   font-size: 11px;
@@ -114,9 +122,9 @@ input[type="checkbox"] {
 
 /* Wygląd samego suwaka */
 input[type="range"] {
-  accent-color: #ff0000; 
+  accent-color: #ff0000;
   cursor: pointer;
-  width: 100px; 
+  width: 100px;
 }
 
 /* Kontener trzymający suwak i pole liczbowe obok siebie */
@@ -141,11 +149,17 @@ input[type="range"] {
 }
 
 /* Ukrycie domyślnych strzałek góra/dół dla czystszego wyglądu (opcjonalne) */
-.num-input::-webkit-inner-spin-button, 
-.num-input::-webkit-outer-spin-button { 
-  -webkit-appearance: none; 
-  margin: 0; 
+.num-input::-webkit-inner-spin-button,
+.num-input::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
 }
+
 .num-input {
   -moz-appearance: textfield;
+}
+
+/* Hide the second canvas container by default */
+#canvas-container-2 {
+    display: none; 
 }

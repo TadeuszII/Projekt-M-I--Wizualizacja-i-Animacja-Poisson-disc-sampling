@@ -21,6 +21,7 @@
 
     <div id="canvases-wrapper">
         <div id="canvas-container" class="canvas-box"></div>
+        <div id="canvas-container-2" class="canvas-box"></div>
     </div>
 
     <div id="ui-container">
@@ -97,7 +98,8 @@
 
         <div class="control-group">
             <label class="checkbox-label">
-                <input type="checkbox" id="show-random"> Show Random Point Generation
+                <input type="checkbox" id="show-random" onchange="toggleSecondCanvas(this.checked)"> Show Random Point
+                Generation
             </label>
         </div>
 

@@ -15,14 +15,20 @@ var isPaused = false; // Flaga do zatrzymywania animacji
 
 // --- variables for drawing ---
 
-var width = 400; // szerokość canvasu
-var height = 400; // wysokość canvasu
+var CanvasDefaultWidth = 400; // domyslna szerokosc canvasu
+var CanvasDefaultHeight = 400; // domyslna wysokosc canvasu
+
+var customWidth = CanvasDefaultWidth; // szerokosc canvasu
+var customHeight = CanvasDefaultHeight; // wysokosc canvasu
+
+
+
 var ordered = [];  // tablica przechowująca punkty w kolejności ich dodawania do gridu
 
 
 var strokeColor = 'white' // kolor nieaktywnych punktow
 var colorActive = 'purple' // kolor aktywnych punktow
-var strokeWidth = r * 0.5 // grubość linii
+var strokeWidth = r * 0.5 // grubosc linii
 
 // --- variables for algorithm ---
 
@@ -46,6 +52,21 @@ var rows; // liczba wierszy w gridzie
 
 // --- Button functions ---
 
+
+function toggleSecondCanvas(isTurnedOn) {
+    var container2 = document.getElementById('canvas-container-2');
+
+    if (container2) {
+        if (isTurnedOn) {
+            container2.style.display = 'block'; // Pokazuje drugie okno
+            resizeCanvas(CanvasDefaultWidth, CanvasDefaultHeight); // Zmienia rozmiar drugiego canvasu
+            resetAlgorithm(); // Wymusza reset od nowa, żeby oba okna były zsynchronizowane
+        } else {
+            container2.style.display = 'none'; // Ukrywa drugie okno
+        }
+    }
+}
+
 function togglePause() // -- Funckja pauzy/odpauzowania animacji --
 {
     isPaused = !isPaused; // Switch
@@ -60,6 +81,13 @@ function togglePause() // -- Funckja pauzy/odpauzowania animacji --
 function resetAlgorithm() // -- Resetowanie wszystkich zmiennych --
 {
     initPoissonDiscSampling(); // -- funckja ustawia wszstko na deffault --
+    if (document.getElementById('canvas-container-2').style.display === 'block') {
+        liczbaPunktowRandom = 0; // reset licznika punktów losowych
+        p2.background(0); // czyszczenie drugiego canvasu
+        p2.loop(); // Wznawia petla draw() w drugim canvasie
+    }
+
+
     loop(); // Wznawia petla draw() po resecie
 }
 
@@ -73,10 +101,10 @@ function changeCanvasSize() { // -- funckja zmienia rozmiar canvasu --
         return; // - jezeli checkbox jest zaznaczony, nie zmieniamy rozmiaru canvasu -
     }
 
-    width = parseInt(document.getElementById('width-slider').value);
-    height = parseInt(document.getElementById('height-slider').value);
+    customWidth = parseInt(document.getElementById('width-slider').value);
+    customHeight = parseInt(document.getElementById('height-slider').value);
 
-    resizeCanvas(width, height);
+    resizeCanvas(customWidth, customHeight);
 
     initPoissonDiscSampling(); // - funckja ustawia wszstko na deffault -
 
@@ -151,12 +179,12 @@ function updateR_And_Parameters() { // -- funckja aktualizująca wartosc r --
 // --- Main functions ---
 function setup() {
     //createCanvas(400, 400);
-
-    var myCanvas = createCanvas(width, height);
+    
+    var myCanvas = createCanvas(customWidth, customHeight);
     myCanvas.parent('canvas-container');
     background(0);
     strokeWeight(4);
-    stroke('white');
+    stroke(strokeColor);
     colorMode(HSB);
 
     // ---- Step 0: Initialize an n-dimensional background grid... ----
@@ -371,5 +399,39 @@ function draw() {
     }
 
 }
+
+
+// ---- End of first canvas and main animation  ----
+
+
+// ---- Second canvas with random point generation ----
+
+var liczbaPunktowRandom = 0; // licznik punktow losowych
+function sketch2(p) {
+    p.setup = function () {
+        p.createCanvas(CanvasDefaultWidth, CanvasDefaultHeight).parent('canvas-container-2');
+        p.background(0);
+        p.strokeWeight(parseInt(document.getElementById('stroke-input').value));
+
+
+    }
+
+    p.draw = function () {
+        if (document.getElementById('canvas-container-2').style.display === 'block') {
+
+            for (var total = 0; total < liczba_iteracji; total++) {
+                if (liczbaPunktowRandom <= 1000) {
+                    p.stroke(strokeColor);
+                    p.point(p.random(p.width), p.random(p.height));
+                    liczbaPunktowRandom++;
+                } else {
+                    p.noLoop(); // Zatrzymuje petla draw() po narysowaniu 1000 punktów
+                }
+            }
+        }
+    }
+
+}
+var p2 = new p5(sketch2);
 
 
