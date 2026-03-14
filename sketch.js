@@ -28,13 +28,17 @@ var ordered = [];  // tablica przechowująca punkty w kolejności ich dodawania 
 
 var strokeColor = 'white' // kolor nieaktywnych punktow
 var colorActive = 'purple' // kolor aktywnych punktow
-var strokeWidth = r * 0.5 // grubosc linii
+
 
 // --- variables for algorithm ---
 
 var r = 10 // Punkty beda w promieniu 10px od siebie
 var k = 20 // liczba prob przed tym jak odrzucimy punkt
 var liczba_iteracji = 50; // szybkosc animacji, im większa liczba iteracji, tym szybciej będzie się rysować, ale może być mniej płynna animacja
+
+
+var strokeWidth = r * 0.5 // grubosc linii
+
 
 const n = 2 // liczba wymiarow (demension)
 
@@ -47,6 +51,10 @@ var active = [] // tablica przechowujaca aktywne punkty
 
 var columns; // liczba kolumn w gridzie
 var rows; // liczba wierszy w gridzie
+
+
+loopMore = 0;
+
 
 // ---- Functions ----
 
@@ -179,7 +187,7 @@ function updateR_And_Parameters() { // -- funckja aktualizująca wartosc r --
 // --- Main functions ---
 function setup() {
     //createCanvas(400, 400);
-    
+
     var myCanvas = createCanvas(customWidth, customHeight);
     myCanvas.parent('canvas-container');
     background(0);
@@ -299,9 +307,12 @@ function draw() {
 
                         break; // one point per frame delte to do it faster
                     } else {
-                        stroke('red');
-                        strokeWeight(strokeWidth); // Slightly thicker so you can see them flash
-                        point(sample.x, sample.y);
+
+                        if (document.getElementById('show-rejected').checked && active.length > 0) {
+                            stroke('red');
+                            strokeWeight(strokeWidth); // Bylo zmieniono na strokewidht zeby bylo takiego samego rozmiaru
+                            point(sample.x, sample.y);
+                        }
                     }
 
 
@@ -316,87 +327,112 @@ function draw() {
         }
     }
 
-    // --- biale kolorowanie punktow w gridzie ---
-    for (var i = 0; i < grid.length; i++) {
-        if (grid[i]) {
-            stroke(strokeColor);
-            strokeWeight(strokeWidth);
 
-            point(grid[i].x, grid[i].y); // rysowanie punktu z gridzie
-        }
+
+
+    switch (document.getElementById('color-theme').value) {
+        case 'white':
+
+            // --- biale kolorowanie punktow w gridzie ---
+            for (var i = 0; i < grid.length; i++) {
+                if (grid[i]) {
+                    stroke(strokeColor);
+                    strokeWeight(strokeWidth);
+
+                    point(grid[i].x, grid[i].y); // rysowanie punktu z gridzie
+                }
+
+            }
+            break;
+
+        case 'rainbow_fixed_pos':
+            // ---- Kolorowanie punktow w gridzie zależnie od ich indeksu ----
+            for (var i = 0; i < grid.length; i++) {
+                if (grid[i]) {
+                    stroke(i / 100 % 360, 100, 100); // kolor punktu zależny od jego indeksu w gridzie
+                    strokeWeight(strokeWidth);
+
+                    point(grid[i].x, grid[i].y); // rysowanie punktu z gridzie
+                }
+
+            }
+            break;
+
+        case 'rainbow_noise':
+            // ---- Rainbow noise ----
+            for (var i = 0; i < ordered.length; i++) {
+                if (ordered[i]) {
+                    stroke(i % 360, 100, 100); // kolor punktu zależny od jego indeksu w tablicy ordered
+                    strokeWeight(strokeWidth);
+
+                    point(ordered[i].x, ordered[i].y); // rysowanie punktu z tablicy ordered
+                }
+
+            }
+
+            break;
+
+        case 'order':
+            var a = 0;
+            for (var i = 0; i < ordered.length; i++) {
+                if (ordered[i]) {
+
+                    if (i % ((customWidth + customHeight) / r) === 0) {
+                        a += 1;
+                    }
+
+                    var colorValue = min(a, 360);
+                    stroke(colorValue, 100, 100); // kolor punktu zależny od jego indeksu w tablicy ordered
+                    strokeWeight(strokeWidth);
+
+                    point(ordered[i].x, ordered[i].y); // rysowanie punktu z tablicy ordered
+                }
+
+            }
+            break;
+
+        default:
+            // --- biale kolorowanie punktow w gridzie ---
+            for (var i = 0; i < grid.length; i++) {
+                if (grid[i]) {
+                    stroke(strokeColor);
+                    strokeWeight(strokeWidth);
+
+                    point(grid[i].x, grid[i].y); // rysowanie punktu z gridzie
+                }
+
+            }
+            break;
 
     }
 
 
-    // ---- Kolorowanie punktow w gridzie zależnie od ich indeksu ----
-    // for (var i = 0; i < grid.length; i++) {
-    //     if (grid[i]) {
-    //         stroke(i / 100 % 360, 100, 100); // kolor punktu zależny od jego indeksu w gridzie
-    //         strokeWeight(1);
-
-    //         point(grid[i].x, grid[i].y); // rysowanie punktu z gridzie
-    //     }
-
-    // }
-
-
-    // ---- Kolorowanie punktow w tablicy ordered zależnie od ich indeksu ----
-    // for (var i = 0; i < ordered.length; i++) {
-    //     if (ordered[i]) {
-    //         stroke(i % 360, 100, 100); // kolor punktu zależny od jego indeksu w tablicy ordered
-    //         strokeWeight(20);
-
-    //         point(ordered[i].x, ordered[i].y); // rysowanie punktu z tablicy ordered
-    //     }
-
-    // }
-
     // ---- Kolorowanie punktow w tablicy ordered zależnie od ich indeksu, ale z mniejszą ilością kolorów ----
-    // var a = 0;
-    // for (var i = 0; i < ordered.length; i++) {
-    //     if (ordered[i]) {
 
-    //         if (i % 100 === 0){
-    //             a += 1;
-    //         }
-
-    //         var colorValue = min(a, 359);
-    //         stroke(colorValue, 100, 100); // kolor punktu zależny od jego indeksu w tablicy ordered
-    //         strokeWeight(1);
-
-    //         point(ordered[i].x, ordered[i].y); // rysowanie punktu z tablicy ordered
-    //     }
-
-    // }
 
 
 
     // --- loop przez aktywne punkty ---
-    for (var i = 0; i < active.length; i++) {
-        stroke(colorActive);
-        strokeWeight(strokeWidth);
-        point(active[i].x, active[i].y);
+    if (document.getElementById('show-active').checked) {
+        for (var i = 0; i < active.length; i++) {
+            stroke(colorActive);
+            strokeWeight(strokeWidth);
+            point(active[i].x, active[i].y);
 
+        }
     }
 
 
     if (active.length === 0) {
 
-        background(0);
-
-        for (var i = 0; i < grid.length; i++) {
-            if (grid[i]) {
-                stroke(strokeColor);
-                strokeWeight(strokeWidth);
-
-                point(grid[i].x, grid[i].y); // rysowanie punktu z gridzie
-            }
-
+        if (loopMore === 2) {
+            noLoop(); // Zatrzymuje petla draw() gdy nie ma już aktywnych punktów
         }
 
-        noLoop(); // Zatrzymuje petla draw() gdy nie ma już aktywnych punktów
-
+        loopMore = 1;
     }
+
+
 
 }
 

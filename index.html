@@ -101,12 +101,40 @@
                 <input type="checkbox" id="show-random" onchange="toggleSecondCanvas(this.checked)"> Show Random Point
                 Generation
             </label>
+
+            <label class="checkbox-label" style="margin-left: 15px;">
+                <input type="checkbox" id="show-rejected" checked> Show Rejected Points (Red)
+            </label>
+
+            <label class="checkbox-label" style="margin-left: 15px;">
+                <input type="checkbox" id="show-active" checked> Show Active Points (Purple)
+            </label>
+        </div>
+
+        <div class="control-group" style="margin-top: 10px;">
+            <label class="slider-label" style="flex-direction: row; align-items: center; gap: 8px;">
+                Color Theme:
+                <select id="color-theme" class="num-input" style="width: 150px; cursor: pointer;">
+                    <option value="white">White</option>
+                    <option value="rainbow_fixed_pos">Rainbow (Fixed Position)</option>
+                    <option value="rainbow_noise">Rainbow (Noise)</option>
+                    <option value="order">Rainbow (Order of creation)</option>
+                </select>
+            </label>
         </div>
 
     </div>
 
-
     <script src="sketch.js"></script>
+</body>
+
+</html>
+
+
+
+
+
+<script src="sketch.js"></script>
 </body>
 
 </html>
