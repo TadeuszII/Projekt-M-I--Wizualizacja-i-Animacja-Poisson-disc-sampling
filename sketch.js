@@ -33,6 +33,7 @@ var colorActive = 'purple' // kolor aktywnych punktow
 // --- variables for algorithm ---
 
 var r = 10 // Punkty beda w promieniu 10px od siebie
+var r2 = r * r;
 var k = 20 // liczba prob przed tym jak odrzucimy punkt
 var liczba_iteracji = 50; // szybkosc animacji, im większa liczba iteracji, tym szybciej będzie się rysować, ale może być mniej płynna animacja
 
@@ -92,6 +93,7 @@ function resetAlgorithm() // -- Resetowanie wszystkich zmiennych --
     if (document.getElementById('canvas-container-2').style.display === 'block') {
         liczbaPunktowRandom = 0; // reset licznika punktów losowych
         p2.background(0); // czyszczenie drugiego canvasu
+        p2.strokeWeight(parseInt(document.getElementById('stroke-input').value));
         p2.loop(); // Wznawia petla draw() w drugim canvasie
     }
 
@@ -179,6 +181,7 @@ function setToDefault() { // -- funckja ustawia r, k, color width na deffault --
 
 function updateR_And_Parameters() { // -- funckja aktualizująca wartosc r --
     r = parseInt(document.getElementById('r-input').value);
+    r2 = r * r;
     resetAlgorithm();
 }
 
@@ -282,17 +285,22 @@ function draw() {
 
                             if (neighbor) // jeśli sąsiad istnieje
                             {
-                                var distance = p5.Vector.dist(sample, neighbor);
-                                if (distance < r) // jeśli dystans jest mniejszy niż r, to odrzucamy punkt
+
+                               // var distance = p5.Vector.dist(sample, neighbor);
+                                var dx = sample.x - neighbor.x;
+                                var dy = sample.y - neighbor.y;
+                                var distance = dx* dx + dy* dy;
+                                if (distance < r2) // jeśli dystans jest mniejszy niż r, to odrzucamy punkt
                                 {
                                     czy_punkt_jest_ok = false;
+                                    break;
                                 }
 
                             }
 
                         }
 
-
+                        if (!czy_punkt_jest_ok) break;
                     }
 
                     if (czy_punkt_jest_ok) //  -- jeśli punkt jest dobry to dodamy go --
@@ -429,7 +437,7 @@ function draw() {
             noLoop(); // Zatrzymuje petla draw() gdy nie ma już aktywnych punktów
         }
 
-        loopMore = 1;
+        loopMore++;
     }
 
 
