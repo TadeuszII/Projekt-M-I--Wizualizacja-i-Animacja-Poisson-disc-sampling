@@ -4,42 +4,55 @@ body {
   padding: 0;
   background-color: #ffffff;
   min-height: 100vh;
-
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
-
   font-family: sans-serif;
   color: #ff0000;
-  /* Domyślny kolor tekstu */
+  padding-top: 60px;
+  /* Zostawiamy miejsce na górny pasek, żeby nie zasłonił tytułu */
 }
 
-/* Foto filii */
-.top-left-img {
+/* NOWE: Ciemnoczerwony pasek na całą szerokość */
+.top-bar {
   position: absolute;
-  top: 15px;
-  left: 15px;
-  width: 100px;
-  height: auto;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 50px;
+  background-color: #532272;
+  /* Ciemnoczerwony kolor (DarkRed) */
+  display: flex;
+  align-items: center;
+  padding-left: 15px;
+  box-sizing: border-box;
+}
+
+/* NOWE: Logo wewnątrz paska */
+.top-bar-img {
+  height: 40px;
+  /* Dopasowane do wysokości paska */
+  width: auto;
 }
 
 /* tytuł */
 .title {
   color: #ff0000;
-  margin-bottom: 20px;
+  margin-top: 5px;
+  /* Mniejsze marginesy dla oszczędności miejsca */
+  margin-bottom: 10px;
   font-size: 18px;
 }
 
-/* Układ canvasiw */
+/* Układ canvasów */
 #canvases-wrapper {
   display: flex;
-  gap: 20px;
-  margin-bottom: 15px;
-  /* Niewielki odstęp nad przyciskami */
+  gap: 10px;
+  /* Mniejszy odstęp między canvasami */
+  margin-bottom: 10px;
 }
 
-/* ramka wokoł canvasu */
+/* ramka wokół canvasu */
 .canvas-box canvas {
   border: 2px solid #ff0000;
   display: block;
@@ -49,14 +62,16 @@ body {
 #ui-container {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 5px;
+  /* Ciasne ułożenie wszystkich elementów kontrolnych */
   align-items: center;
 }
 
 .control-group {
   display: flex;
-  gap: 8px;
-  /* Mniejsze odstępy między małymi przyciskami */
+  gap: 6px;
+  /* Ciasno między przyciskami głównymi */
+  margin-bottom: 5px;
 }
 
 /* przyciski */
@@ -64,16 +79,13 @@ body {
   background-color: #ffffff;
   color: #ff0000;
   border: 1px solid #ff0000;
-  padding: 4px 10px;
-  /* Znacznie mniejszy padding */
-  font-size: 12px;
-  /* Mała czcionka */
+  padding: 3px 8px;
+  /* Jeszcze mniejszy padding */
+  font-size: 11px;
   cursor: pointer;
   border-radius: 2px;
-  /* Minimalne zaokrąglenie */
 }
 
-/* Odwrocenie kolorow po najechaniu */
 .btn:hover {
   background-color: #ff0000;
   color: #ffffff;
@@ -82,62 +94,64 @@ body {
 /* Pole wyboru i tekst  */
 .checkbox-label {
   color: #ff0000;
-  font-size: 12px;
+  font-size: 11px;
   cursor: pointer;
   display: flex;
   align-items: center;
-  gap: 5px;
+  gap: 4px;
 }
 
 input[type="checkbox"] {
   accent-color: #ff0000;
   cursor: pointer;
-  width: 14px;
-  height: 14px;
+  width: 12px;
+  height: 12px;
+  margin: 0;
 }
-
 
 /* Tekst nad suwakiem */
 .slider-label {
   display: flex;
   flex-direction: column;
-  /* Tekst nad suwakiem, a sam suwak pod spodem */
-  align-items: center;
+  align-items: flex-start;
+  /* Tekst i suwak wyrównane do lewej */
   color: #ff0000;
   font-size: 11px;
   font-weight: bold;
-  gap: 4px;
+  gap: 2px;
+  /* Bardzo blisko siebie */
 }
 
 /* Wygląd samego suwaka */
 input[type="range"] {
   accent-color: #ff0000;
   cursor: pointer;
-  width: 100px;
+  width: 80px;
+  /* Nieco krótszy suwak = oszczędność miejsca */
+  margin: 0;
 }
 
 /* Kontener trzymający suwak i pole liczbowe obok siebie */
 .slider-controls {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 5px;
 }
 
-/* Prosty wygląd pola liczbowego (w stylu przycisków) */
+/* Prosty wygląd pola liczbowego */
 .num-input {
   background-color: #ffffff;
   color: #ff0000;
   border: 1px solid #ff0000;
-  padding: 3px 5px;
-  font-size: 12px;
+  padding: 2px 4px;
+  font-size: 11px;
   border-radius: 2px;
-  width: 45px;
+  width: 40px;
   text-align: center;
   outline: none;
   font-family: sans-serif;
 }
 
-/* Ukrycie domyślnych strzałek góra/dół dla czystszego wyglądu (opcjonalne) */
 .num-input::-webkit-inner-spin-button,
 .num-input::-webkit-outer-spin-button {
   -webkit-appearance: none;
@@ -148,42 +162,43 @@ input[type="range"] {
   -moz-appearance: textfield;
 }
 
-/* Hide the second canvas container by default */
+/* Domyślnie ukryty drugi canvas */
 #canvas-container-2 {
-    display: none; 
+  display: none;
 }
 
-
-/* Kontener dla wszystkich ramek - układa je w rzędzie */
+/* ZMIENIONE: Kontener dla wszystkich ramek */
 .settings-panels {
   display: flex;
-  flex-wrap: wrap; /* Pozwala ramkom "spadać" niżej na mniejszych ekranach */
-  gap: 20px;
+  flex-wrap: nowrap;
+  /* Wymusza ramki w jednym rzędzie */
+  gap: 8px;
+  /* Bardzo mały odstęp między ramkami */
   justify-content: center;
-  align-items: stretch; /* Sprawia, że wszystkie ramki są równej wysokości */
-  width: 100%;
-  max-width: 800px;
-  margin-top: 10px;
+  align-items: flex-start;
+  /* Elementy 'przyklejone' do góry */
+  margin-top: 0px;
 }
 
-/* Styl dla pojedynczej ramki (Canvas, Algorytm, Animacja) */
+/* ZMIENIONE: Styl dla ramki (fieldset) */
 .ui-box {
-  border: 1px solid #ff0000; /* Czerwona ramka */
-  border-radius: 4px;
-  padding: 15px;
+  border: 1px solid #ff0000;
+  border-radius: 3px;
+  padding: 8px 10px;
+  /* Bardzo małe marginesy wewnętrzne */
+  margin: 0;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: 12px;
-  min-width: 200px; /* Minimalna szerokość każdej ramki */
-  box-sizing: border-box;
+  align-items: flex-start;
+  /* Wyrównanie do lewej wewnątrz ramki */
+  gap: 6px;
+  /* Ciasno ułożone rzędy w ramce */
 }
 
-/* Styl tytułu ramki */
 .ui-box legend {
   color: #ff0000;
   font-weight: bold;
-  font-size: 14px;
-  padding: 0 8px; /* Odstęp tekstu od linii ramki */
+  font-size: 12px;
+  padding: 0 4px;
   text-transform: uppercase;
 }

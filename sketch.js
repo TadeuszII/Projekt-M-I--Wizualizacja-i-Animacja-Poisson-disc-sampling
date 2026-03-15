@@ -15,46 +15,37 @@ var isPaused = false; // Flaga do zatrzymywania animacji
 
 // --- variables for drawing ---
 
+// -- Variables --
 var CanvasDefaultWidth = 400; // domyslna szerokosc canvasu
 var CanvasDefaultHeight = 400; // domyslna wysokosc canvasu
 
 var customWidth = CanvasDefaultWidth; // szerokosc canvasu
 var customHeight = CanvasDefaultHeight; // wysokosc canvasu
 
-
-
-var ordered = [];  // tablica przechowująca punkty w kolejności ich dodawania do gridu
-
-
 var strokeColor = 'white' // kolor nieaktywnych punktow
 var colorActive = 'purple' // kolor aktywnych punktow
 
+// -- Arrays -- 
+var ordered = [];  // tablica przechowująca punkty w kolejności ich dodawania do gridu
 
 // --- variables for algorithm ---
-
 var r = 10 // Punkty beda w promieniu 10px od siebie
 var r2 = r * r;
 var k = 20 // liczba prob przed tym jak odrzucimy punkt
 var liczba_iteracji = 50; // szybkosc animacji, im większa liczba iteracji, tym szybciej będzie się rysować, ale może być mniej płynna animacja
 
-
-var strokeWidth = r * 0.5 // grubosc linii
-
+var strokeWidth = r * 0.5 // grubosc linii // --- variable for drawing ---
 
 const n = 2 // liczba wymiarow (demension)
-
 var cellSize = r / Math.sqrt(n) // rozmiar komorki ( formula z artykulu )
+var columns; // liczba kolumn w gridzie
+var rows; // liczba wierszy w gridzie
+
+loopMore = 0;
 
 // -- Arrays --
 var grid = [] // tablica dwuwymiarowa przechowujaca punkty
 var active = [] // tablica przechowujaca aktywne punkty
-
-
-var columns; // liczba kolumn w gridzie
-var rows; // liczba wierszy w gridzie
-
-
-loopMore = 0;
 
 
 // ---- Functions ----
@@ -97,7 +88,6 @@ function resetAlgorithm() // -- Resetowanie wszystkich zmiennych --
         p2.loop(); // Wznawia petla draw() w drugim canvasie
     }
 
-
     loop(); // Wznawia petla draw() po resecie
 }
 
@@ -120,6 +110,26 @@ function changeCanvasSize() { // -- funckja zmienia rozmiar canvasu --
 
 }
 
+function setStrokeToRecomended() { // -- Funkcja wystawia Stroke na rekomendowana wartosc
+    document.getElementById('stroke-slider').value = (r * 0.5);
+    document.getElementById('stroke-input').value = (r * 0.5);
+}
+
+
+function setToDefault() { // -- funckja ustawia r, k, color width na deffault --
+
+    document.getElementById('r-input').value = 10;
+    document.getElementById('r-slider').value = 10;
+    document.getElementById('k-input').value = 20;
+    document.getElementById('k-slider').value = 20;
+
+    document.getElementById('stroke-slider').value = (r * 0.5);
+    document.getElementById('stroke-input').value = (r * 0.5);
+
+    updateR_And_Parameters(); // -- funckja aktualizujaca r i resetuje algortym  --
+}
+
+// --- Helper functions ---
 function initPoissonDiscSampling() // -- funckja ustawia wszstko na deffault --
 {
 
@@ -132,9 +142,6 @@ function initPoissonDiscSampling() // -- funckja ustawia wszstko na deffault --
     // - variables - 
 
     cellSize = r / Math.sqrt(n) // rozmiar komorki ( formula z artykulu )
-    columns = floor(width / cellSize) // liczba kolumn
-    rows = floor(height / cellSize) // liczba wierszy
-
     columns = floor(width / cellSize) // liczba kolumn
     rows = floor(height / cellSize) // liczba wierszy
 
@@ -159,29 +166,6 @@ function initPoissonDiscSampling() // -- funckja ustawia wszstko na deffault --
         active.push(position);
         ordered.push(position);
     }
-    // var i = floor(x / cellSize);
-    // var j = floor(y / cellSize);
-    // grid[i + j * columns] = position; // umieszczenie punktu startowego w gridzie
-
-}
-
-function setStrokeToRecomended(){ // -- Funkcja wystawia Stroke na rekomendowana wartosc
-    document.getElementById('stroke-slider').value = (r * 0.5);
-    document.getElementById('stroke-input').value = (r * 0.5);
-}
-
-
-function setToDefault() { // -- funckja ustawia r, k, color width na deffault --
-
-    document.getElementById('r-input').value = 10;
-    document.getElementById('r-slider').value = 10;
-    document.getElementById('k-input').value = 20;
-    document.getElementById('k-slider').value = 20;
-
-    document.getElementById('stroke-slider').value = (r * 0.5);
-    document.getElementById('stroke-input').value = (r * 0.5);
-
-    updateR_And_Parameters(); // -- funckja aktualizujaca r i resetuje algortym  --
 }
 
 function updateR_And_Parameters() { // -- funckja aktualizująca wartosc r --
@@ -194,8 +178,7 @@ function updateR_And_Parameters() { // -- funckja aktualizująca wartosc r --
 
 // --- Main functions ---
 function setup() {
-    //createCanvas(400, 400);
-
+    
     var myCanvas = createCanvas(customWidth, customHeight);
     myCanvas.parent('canvas-container');
     background(0);
@@ -203,36 +186,9 @@ function setup() {
     stroke(strokeColor);
     colorMode(HSB);
 
-    // ---- Step 0: Initialize an n-dimensional background grid... ----
-    columns = floor(width / cellSize) // liczba kolumn
-    rows = floor(height / cellSize) // liczba wierszy
+    initPoissonDiscSampling();
 
-    for (var i = 0; i < columns * rows; i++) // the default −1 indicates no sample, a
-    //non-negative integer gives the index of the sample located in a cell.
-    {
-        grid[i] = undefined;
-    }
-
-
-    // ---- Step 1: Select the initial sample x0, randomly ( i jeszce na wybor) ...
-
-    // --- Losowanie punktow startowych ---
-    var x = Math.random() * (width - 1);
-    var y = Math.random() * (height - 1);
-    var position = createVector(x, y);
-
-    // --- Umieszczenie punktu startowego w gridzie ---
-    var i = floor(x / cellSize);
-    var j = floor(y / cellSize);
-    grid[i + j * columns] = position; // umieszczenie punktu startowego w gridzie
-
-    // --- Umieszczenie punktu startowego w tablicy aktywnych ---
-    active.push(position);
-    ordered.push(position);
-
-    background(0);
 }
-
 
 function draw() {
 
@@ -243,13 +199,13 @@ function draw() {
 
     // --- pobranie wartosci liczby iteracji z suwaka szybkości ---
     liczba_iteracji = parseInt(document.getElementById('speed-slider').value); // pobranie wartości z suwaka szybkości
-
     // --- pobranie wartosci k z suwaka i inputa ---
     k = parseInt(document.getElementById('k-input').value);
     // --- pobranie wartosci z suwaka grubosci linii ---
     strokeWidth = parseInt(document.getElementById('stroke-input').value);
 
     // ---- Step 2 While the active list is not empty... ----
+    // --- Pętla główna algorytmu ---
     for (var total = 0; total < liczba_iteracji; total++) { // 5 raza per frame, zeby bylo szybciej, ale mozna usunac i bedzie animacja
         if (active.length > 0) { // while = odrazu, if = animacja, 
 
@@ -260,9 +216,6 @@ function draw() {
             var found = false; // zmienna pomocnicza do sprawdzania czy znaleźliśmy odpowiedni punkt
 
             for (var n = 0; n < k; n++) {
-
-
-
 
                 var sample = p5.Vector.random2D(); // losowanie wektora przesunięcia
                 sample.setMag(random(r, 2 * r)); // ustawienie długości wektora przesunięcia
@@ -291,10 +244,10 @@ function draw() {
                             if (neighbor) // jeśli sąsiad istnieje
                             {
 
-                               // var distance = p5.Vector.dist(sample, neighbor);
+                                // var distance = p5.Vector.dist(sample, neighbor);
                                 var dx = sample.x - neighbor.x;
                                 var dy = sample.y - neighbor.y;
-                                var distance = dx* dx + dy* dy;
+                                var distance = dx * dx + dy * dy;
                                 if (distance < r2) // jeśli dystans jest mniejszy niż r, to odrzucamy punkt
                                 {
                                     czy_punkt_jest_ok = false;
@@ -305,7 +258,7 @@ function draw() {
 
                         }
 
-                        if (!czy_punkt_jest_ok) break;
+                        if (!czy_punkt_jest_ok) break; // Jesli punkt jest juz odrzuczony przeyrwamy
                     }
 
                     if (czy_punkt_jest_ok) //  -- jeśli punkt jest dobry to dodamy go --
@@ -341,29 +294,15 @@ function draw() {
     }
 
 
-
-
+    // ---- Rysowanie punktów ----
+    strokeWeight(strokeWidth);
     switch (document.getElementById('color-theme').value) {
-        case 'white':
-
-            // --- biale kolorowanie punktow w gridzie ---
-            for (var i = 0; i < grid.length; i++) {
-                if (grid[i]) {
-                    stroke(strokeColor);
-                    strokeWeight(strokeWidth);
-
-                    point(grid[i].x, grid[i].y); // rysowanie punktu z gridzie
-                }
-
-            }
-            break;
 
         case 'rainbow_fixed_pos':
             // ---- Kolorowanie punktow w gridzie zależnie od ich indeksu ----
             for (var i = 0; i < grid.length; i++) {
                 if (grid[i]) {
                     stroke(i / 100 % 360, 100, 100); // kolor punktu zależny od jego indeksu w gridzie
-                    strokeWeight(strokeWidth);
 
                     point(grid[i].x, grid[i].y); // rysowanie punktu z gridzie
                 }
@@ -376,7 +315,6 @@ function draw() {
             for (var i = 0; i < ordered.length; i++) {
                 if (ordered[i]) {
                     stroke(i % 360, 100, 100); // kolor punktu zależny od jego indeksu w tablicy ordered
-                    strokeWeight(strokeWidth);
 
                     point(ordered[i].x, ordered[i].y); // rysowanie punktu z tablicy ordered
                 }
@@ -396,7 +334,6 @@ function draw() {
 
                     var colorValue = min(a, 360);
                     stroke(colorValue, 100, 100); // kolor punktu zależny od jego indeksu w tablicy ordered
-                    strokeWeight(strokeWidth);
 
                     point(ordered[i].x, ordered[i].y); // rysowanie punktu z tablicy ordered
                 }
@@ -409,7 +346,6 @@ function draw() {
             for (var i = 0; i < grid.length; i++) {
                 if (grid[i]) {
                     stroke(strokeColor);
-                    strokeWeight(strokeWidth);
 
                     point(grid[i].x, grid[i].y); // rysowanie punktu z gridzie
                 }
@@ -418,12 +354,6 @@ function draw() {
             break;
 
     }
-
-
-    // ---- Kolorowanie punktow w tablicy ordered zależnie od ich indeksu, ale z mniejszą ilością kolorów ----
-
-
-
 
     // --- loop przez aktywne punkty ---
     if (document.getElementById('show-active').checked) {
@@ -436,7 +366,7 @@ function draw() {
     }
 
 
-    if (active.length === 0) {
+    if (active.length === 0) { // --- jesli niema aktywnych punktow
 
         if (loopMore === 2) {
             noLoop(); // Zatrzymuje petla draw() gdy nie ma już aktywnych punktów
@@ -444,8 +374,6 @@ function draw() {
 
         loopMore++;
     }
-
-
 
 }
 
@@ -461,8 +389,6 @@ function sketch2(p) {
         p.createCanvas(CanvasDefaultWidth, CanvasDefaultHeight).parent('canvas-container-2');
         p.background(0);
         p.strokeWeight(parseInt(document.getElementById('stroke-input').value));
-
-
     }
 
     p.draw = function () {

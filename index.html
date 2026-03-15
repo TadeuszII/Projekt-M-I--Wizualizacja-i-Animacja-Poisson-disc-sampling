@@ -7,14 +7,12 @@
     <title>Projekt M - Poisson Disc Sampling</title>
     <link rel="stylesheet" href="style.css">
     <script src="https://cdn.jsdelivr.net/npm/p5@1.9.0/lib/p5.js"></script>
-    
-
-
-
 </head>
 
 <body>
-    <img src="kolor_bez_nazwy_logo_filia_wilno_300.png" alt="Logo" class="top-left-img">
+    <header class="top-bar">
+        <img src="kolor_bez_nazwy_logo_filia_wilno_300.png" alt="Logo" class="top-bar-img">
+    </header>
 
 
 
@@ -36,23 +34,28 @@
 
             <fieldset class="ui-box">
                 <legend>Canvas</legend>
-                
+
                 <label class="slider-label">
                     Szerokość (Width):
                     <div class="slider-controls">
-                        <input type="range" id="width-slider" min="200" max="1000" value="400" oninput="document.getElementById('width-input').value = this.value">
-                        <input type="number" id="width-input" class="num-input" min="200" max="1000" value="400" oninput="document.getElementById('width-slider').value = this.value">
+                        <input type="range" id="width-slider" min="200" max="1000" value="400"
+                            oninput="document.getElementById('width-input').value = this.value">
+                        <input type="number" id="width-input" class="num-input" min="200" max="1000" value="400"
+                            oninput="document.getElementById('width-slider').value = this.value">
                     </div>
                 </label>
-                
+
                 <label class="slider-label">
                     Wysokość (Height):
                     <div class="slider-controls">
-                        <input type="range" id="height-slider" min="200" max="1000" value="400" oninput="document.getElementById('height-input').value = this.value">
-                        <input type="number" id="height-input" class="num-input" min="200" max="1000" value="400" oninput="document.getElementById('height-slider').value = this.value">
+                        <input type="range" id="height-slider" min="200" max="1000" value="400"
+                            oninput="document.getElementById('height-input').value = this.value">
+                        <input type="number" id="height-input" class="num-input" min="200" max="1000" value="400"
+                            oninput="document.getElementById('height-slider').value = this.value">
                     </div>
                 </label>
-                
+
+
                 <button class="btn" style="margin-top: 10px;" onclick="changeCanvasSize()">Change Size</button>
             </fieldset>
 
@@ -62,28 +65,36 @@
                 <label class="slider-label">
                     Szybkość (Iteracje):
                     <div class="slider-controls">
-                        <input type="range" id="speed-slider" min="1" max="200" value="1" oninput="document.getElementById('speed-input').value = this.value">
-                        <input type="number" id="speed-input" class="num-input" min="1" max="200" value="1" oninput="document.getElementById('speed-slider').value = this.value">
+                        <input type="range" id="speed-slider" min="1" max="200" value="1"
+                            oninput="document.getElementById('speed-input').value = this.value">
+                        <input type="number" id="speed-input" class="num-input" min="1" max="200" value="1"
+                            oninput="document.getElementById('speed-slider').value = this.value">
                     </div>
                 </label>
 
                 <label class="slider-label">
                     Promień (r):
                     <div class="slider-controls">
-                        <input type="range" id="r-slider" min="2" max="50" value="10" oninput="document.getElementById('r-input').value = this.value; updateR_And_Parameters()">
-                        <input type="number" id="r-input" class="num-input" min="2" max="50" value="10" oninput="document.getElementById('r-slider').value = this.value; updateR_And_Parameters()">
+                        <input type="range" id="r-slider" min="2" max="50" value="10"
+                            oninput="document.getElementById('r-input').value = this.value; updateR_And_Parameters()">
+                        <input type="number" id="r-input" class="num-input" min="2" max="50" value="10"
+                            oninput="document.getElementById('r-slider').value = this.value; updateR_And_Parameters()">
                     </div>
                 </label>
-                
+
                 <label class="slider-label">
                     Próby (k):
                     <div class="slider-controls">
-                        <input type="range" id="k-slider" min="5" max="100" value="20" oninput="document.getElementById('k-input').value = this.value;">
-                        <input type="number" id="k-input" class="num-input" min="5" max="100" value="20" oninput="document.getElementById('k-slider').value = this.value;">
+                        <input type="range" id="k-slider" min="5" max="100" value="20"
+                            oninput="document.getElementById('k-input').value = this.value;">
+                        <input type="number" id="k-input" class="num-input" min="5" max="100" value="20"
+                            oninput="document.getElementById('k-slider').value = this.value;">
                     </div>
                 </label>
 
                 <button class="btn" style="margin-top: 10px;" onclick="setToDefault()">Default</button>
+
+
             </fieldset>
 
             <fieldset class="ui-box">
@@ -92,16 +103,20 @@
                 <label class="slider-label">
                     Grubość (Stroke):
                     <div class="slider-controls">
-                        <input type="range" id="stroke-slider" min="1" max="20" value="5" oninput="document.getElementById('stroke-input').value = this.value">
-                        <input type="number" id="stroke-input" class="num-input" min="1" max="20" value="5" oninput="document.getElementById('stroke-slider').value = this.value">
+                        <input type="range" id="stroke-slider" min="1" max="20" value="5"
+                            oninput="document.getElementById('stroke-input').value = this.value">
+                        <input type="number" id="stroke-input" class="num-input" min="1" max="20" value="5"
+                            oninput="document.getElementById('stroke-slider').value = this.value">
                     </div>
                 </label>
-                
-                <button class="btn" style="margin-top: 2px; margin-bottom: 15px;" onclick="setStrokeToRecomended()">Default Stroke</button>
+
+                <button class="btn" style="margin-top: 2px; margin-bottom: 15px;"
+                    onclick="setStrokeToRecomended()">Default Stroke</button>
 
                 <div style="display: flex; flex-direction: column; gap: 8px; align-items: flex-start;">
                     <label class="checkbox-label">
-                        <input type="checkbox" id="show-random" onchange="toggleSecondCanvas(this.checked)"> Show Random Generation
+                        <input type="checkbox" id="show-random" onchange="toggleSecondCanvas(this.checked)"> Show Random
+                        Generation
                     </label>
 
                     <label class="checkbox-label">
@@ -111,6 +126,8 @@
                     <label class="checkbox-label">
                         <input type="checkbox" id="show-active" checked> Show Active (Purple)
                     </label>
+
+
                 </div>
 
                 <label class="slider-label" style="margin-top: 15px;">
