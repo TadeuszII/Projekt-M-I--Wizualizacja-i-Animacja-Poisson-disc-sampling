@@ -97,17 +97,6 @@ input[type="checkbox"] {
 }
 
 
-
-
-/* Grupa suwakow ulozona w rzedzie */
-.slider-group {
-  display: flex;
-  gap: 15px;
-  /* Odstęp między suwakami */
-  margin-top: 5px;
-  margin-bottom: 5px;
-}
-
 /* Tekst nad suwakiem */
 .slider-label {
   display: flex;
@@ -162,4 +151,39 @@ input[type="range"] {
 /* Hide the second canvas container by default */
 #canvas-container-2 {
     display: none; 
+}
+
+
+/* Kontener dla wszystkich ramek - układa je w rzędzie */
+.settings-panels {
+  display: flex;
+  flex-wrap: wrap; /* Pozwala ramkom "spadać" niżej na mniejszych ekranach */
+  gap: 20px;
+  justify-content: center;
+  align-items: stretch; /* Sprawia, że wszystkie ramki są równej wysokości */
+  width: 100%;
+  max-width: 800px;
+  margin-top: 10px;
+}
+
+/* Styl dla pojedynczej ramki (Canvas, Algorytm, Animacja) */
+.ui-box {
+  border: 1px solid #ff0000; /* Czerwona ramka */
+  border-radius: 4px;
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  min-width: 200px; /* Minimalna szerokość każdej ramki */
+  box-sizing: border-box;
+}
+
+/* Styl tytułu ramki */
+.ui-box legend {
+  color: #ff0000;
+  font-weight: bold;
+  font-size: 14px;
+  padding: 0 8px; /* Odstęp tekstu od linii ramki */
+  text-transform: uppercase;
 }

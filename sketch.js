@@ -165,6 +165,11 @@ function initPoissonDiscSampling() // -- funckja ustawia wszstko na deffault --
 
 }
 
+function setStrokeToRecomended(){ // -- Funkcja wystawia Stroke na rekomendowana wartosc
+    document.getElementById('stroke-slider').value = (r * 0.5);
+    document.getElementById('stroke-input').value = (r * 0.5);
+}
+
 
 function setToDefault() { // -- funckja ustawia r, k, color width na deffault --
 

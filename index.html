@@ -30,100 +30,101 @@
         <div class="control-group">
             <button class="btn" onclick="togglePause()">Start / Pause</button>
             <button class="btn" onclick="resetAlgorithm()">Reset</button>
-            <button class="btn" onclick="changeCanvasSize()">Change Size</button>
         </div>
 
-        <div class="slider-group">
-            <label class="slider-label">
-                Szerokość (Width):
-                <div class="slider-controls">
-                    <input type="range" id="width-slider" min="200" max="1000" value="400"
-                        oninput="document.getElementById('width-input').value = this.value">
-                    <input type="number" id="width-input" class="num-input" min="200" max="1000" value="400"
-                        oninput="document.getElementById('width-slider').value = this.value">
+        <div class="settings-panels">
+
+            <fieldset class="ui-box">
+                <legend>Canvas</legend>
+                
+                <label class="slider-label">
+                    Szerokość (Width):
+                    <div class="slider-controls">
+                        <input type="range" id="width-slider" min="200" max="1000" value="400" oninput="document.getElementById('width-input').value = this.value">
+                        <input type="number" id="width-input" class="num-input" min="200" max="1000" value="400" oninput="document.getElementById('width-slider').value = this.value">
+                    </div>
+                </label>
+                
+                <label class="slider-label">
+                    Wysokość (Height):
+                    <div class="slider-controls">
+                        <input type="range" id="height-slider" min="200" max="1000" value="400" oninput="document.getElementById('height-input').value = this.value">
+                        <input type="number" id="height-input" class="num-input" min="200" max="1000" value="400" oninput="document.getElementById('height-slider').value = this.value">
+                    </div>
+                </label>
+                
+                <button class="btn" style="margin-top: 10px;" onclick="changeCanvasSize()">Change Size</button>
+            </fieldset>
+
+            <fieldset class="ui-box">
+                <legend>Algorytm</legend>
+
+                <label class="slider-label">
+                    Szybkość (Iteracje):
+                    <div class="slider-controls">
+                        <input type="range" id="speed-slider" min="1" max="200" value="1" oninput="document.getElementById('speed-input').value = this.value">
+                        <input type="number" id="speed-input" class="num-input" min="1" max="200" value="1" oninput="document.getElementById('speed-slider').value = this.value">
+                    </div>
+                </label>
+
+                <label class="slider-label">
+                    Promień (r):
+                    <div class="slider-controls">
+                        <input type="range" id="r-slider" min="2" max="50" value="10" oninput="document.getElementById('r-input').value = this.value; updateR_And_Parameters()">
+                        <input type="number" id="r-input" class="num-input" min="2" max="50" value="10" oninput="document.getElementById('r-slider').value = this.value; updateR_And_Parameters()">
+                    </div>
+                </label>
+                
+                <label class="slider-label">
+                    Próby (k):
+                    <div class="slider-controls">
+                        <input type="range" id="k-slider" min="5" max="100" value="20" oninput="document.getElementById('k-input').value = this.value;">
+                        <input type="number" id="k-input" class="num-input" min="5" max="100" value="20" oninput="document.getElementById('k-slider').value = this.value;">
+                    </div>
+                </label>
+
+                <button class="btn" style="margin-top: 10px;" onclick="setToDefault()">Default</button>
+            </fieldset>
+
+            <fieldset class="ui-box">
+                <legend>Animacja</legend>
+
+                <label class="slider-label">
+                    Grubość (Stroke):
+                    <div class="slider-controls">
+                        <input type="range" id="stroke-slider" min="1" max="20" value="5" oninput="document.getElementById('stroke-input').value = this.value">
+                        <input type="number" id="stroke-input" class="num-input" min="1" max="20" value="5" oninput="document.getElementById('stroke-slider').value = this.value">
+                    </div>
+                </label>
+                
+                <button class="btn" style="margin-top: 2px; margin-bottom: 15px;" onclick="setStrokeToRecomended()">Default Stroke</button>
+
+                <div style="display: flex; flex-direction: column; gap: 8px; align-items: flex-start;">
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="show-random" onchange="toggleSecondCanvas(this.checked)"> Show Random Generation
+                    </label>
+
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="show-rejected"> Show Rejected (Red)
+                    </label>
+
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="show-active" checked> Show Active (Purple)
+                    </label>
                 </div>
-            </label>
-            <label class="slider-label">
-                Wysokość (Height):
-                <div class="slider-controls">
-                    <input type="range" id="height-slider" min="200" max="1000" value="400"
-                        oninput="document.getElementById('height-input').value = this.value">
-                    <input type="number" id="height-input" class="num-input" min="200" max="1000" value="400"
-                        oninput="document.getElementById('height-slider').value = this.value">
-                </div>
-            </label>
-            <label class="slider-label">
-                Szybkość (Iteracje):
-                <div class="slider-controls">
-                    <input type="range" id="speed-slider" min="1" max="200" value="1"
-                        oninput="document.getElementById('speed-input').value = this.value">
-                    <input type="number" id="speed-input" class="num-input" min="1" max="200" value="1"
-                        oninput="document.getElementById('speed-slider').value = this.value">
-                </div>
-            </label>
+
+                <label class="slider-label" style="margin-top: 15px;">
+                    Color Theme:
+                    <select id="color-theme" class="num-input" style="width: 150px; cursor: pointer; margin-top: 5px;">
+                        <option value="white">White</option>
+                        <option value="rainbow_fixed_pos">Rainbow (Position)</option>
+                        <option value="rainbow_noise">Rainbow (Noise)</option>
+                        <option value="order">Rainbow (Order of creation)</option>
+                    </select>
+                </label>
+            </fieldset>
+
         </div>
-
-        <div class="slider-group">
-            <label class="slider-label">
-                Promień (r):
-                <div class="slider-controls">
-                    <input type="range" id="r-slider" min="2" max="50" value="10"
-                        oninput="document.getElementById('r-input').value = this.value; updateR_And_Parameters()">
-                    <input type="number" id="r-input" class="num-input" min="2" max="50" value="10"
-                        oninput="document.getElementById('r-slider').value = this.value; updateR_And_Parameters()">
-                </div>
-            </label>
-            <label class="slider-label">
-                Próby (k):
-                <div class="slider-controls">
-                    <input type="range" id="k-slider" min="5" max="100" value="20"
-                        oninput="document.getElementById('k-input').value = this.value;">
-                    <input type="number" id="k-input" class="num-input" min="5" max="100" value="20"
-                        oninput="document.getElementById('k-slider').value = this.value;">
-                </div>
-            </label>
-            <label class="slider-label">
-                Grubość (Stroke):
-                <div class="slider-controls">
-                    <input type="range" id="stroke-slider" min="1" max="20" value="5"
-                        oninput="document.getElementById('stroke-input').value = this.value">
-                    <input type="number" id="stroke-input" class="num-input" min="1" max="20" value="5"
-                        oninput="document.getElementById('stroke-slider').value = this.value">
-                </div>
-            </label>
-
-            <div style="display: flex; align-items: flex-end; padding-bottom: 2px;">
-                <button class="btn" onclick="setToDefault()">Default</button>
-            </div>
-        </div>
-
-        <div class="control-group">
-            <label class="checkbox-label">
-                <input type="checkbox" id="show-random" onchange="toggleSecondCanvas(this.checked)"> Show Random Point
-                Generation
-            </label>
-
-            <label class="checkbox-label" style="margin-left: 15px;">
-                <input type="checkbox" id="show-rejected" unchecked> Show Rejected Points (Red)
-            </label>
-
-            <label class="checkbox-label" style="margin-left: 15px;">
-                <input type="checkbox" id="show-active" checked> Show Active Points (Purple)
-            </label>
-        </div>
-
-        <div class="control-group" style="margin-top: 10px;">
-            <label class="slider-label" style="flex-direction: row; align-items: center; gap: 8px;">
-                Color Theme:
-                <select id="color-theme" class="num-input" style="width: 150px; cursor: pointer;">
-                    <option value="white">White</option>
-                    <option value="rainbow_fixed_pos">Rainbow (Fixed Position)</option>
-                    <option value="rainbow_noise">Rainbow (Noise)</option>
-                    <option value="order">Rainbow (Order of creation)</option>
-                </select>
-            </label>
-        </div>
-
     </div>
 
     <script src="sketch.js"></script>
