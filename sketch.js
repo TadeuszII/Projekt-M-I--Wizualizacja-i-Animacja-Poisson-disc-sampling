@@ -12,6 +12,7 @@ var sliderWidth;
 var sliderHeight;
 var sliderSpeed;
 var isPaused = false; // Flaga do zatrzymywania animacji
+var epilepsyWarningShown = false; // Flaga do sprawdzania, czy ostrzeżenie o epilepsji zostało już pokazane
 
 // --- variables for drawing ---
 
@@ -70,10 +71,13 @@ function toggleSecondCanvas(isTurnedOn) {
 function togglePause() // -- Funckja pauzy/odpauzowania animacji --
 {
     isPaused = !isPaused; // Switch
+    var btn_text = document.getElementById("btnStartPause");
     if (isPaused) {
         noLoop(); // Zatrzymuje petla draw()
+        btn_text.innerText = "Start";
     } else {
         loop(); // Wznawia petla draw()
+        btn_text.innerText = "Pause";
     }
 }
 
@@ -129,6 +133,12 @@ function setToDefault() { // -- funckja ustawia r, k, color width na deffault --
     updateR_And_Parameters(); // -- funckja aktualizujaca r i resetuje algortym  --
 }
 
+function updateR_And_Parameters() { // -- funckja aktualizująca wartosc r --
+    r = parseInt(document.getElementById('r-input').value);
+    r2 = r * r;
+    resetAlgorithm();
+}
+
 // --- Helper functions ---
 function initPoissonDiscSampling() // -- funckja ustawia wszstko na deffault --
 {
@@ -167,18 +177,9 @@ function initPoissonDiscSampling() // -- funckja ustawia wszstko na deffault --
         ordered.push(position);
     }
 }
-
-function updateR_And_Parameters() { // -- funckja aktualizująca wartosc r --
-    r = parseInt(document.getElementById('r-input').value);
-    r2 = r * r;
-    resetAlgorithm();
-}
-
-
-
 // --- Main functions ---
 function setup() {
-    
+
     var myCanvas = createCanvas(customWidth, customHeight);
     myCanvas.parent('canvas-container');
     background(0);
@@ -215,7 +216,7 @@ function draw() {
 
             var found = false; // zmienna pomocnicza do sprawdzania czy znaleźliśmy odpowiedni punkt
 
-            for (var n = 0; n < k; n++) {
+            for (var n = 0; n < k; n++) { // pętla główna
 
                 var sample = p5.Vector.random2D(); // losowanie wektora przesunięcia
                 sample.setMag(random(r, 2 * r)); // ustawienie długości wektora przesunięcia
@@ -341,6 +342,22 @@ function draw() {
             }
             break;
 
+        case 'random':
+            // --- losowe kolory dla każdego punktu ---
+            if (epilepsyWarningShown === false) {
+                alert("🛑IN CASE OF EPILEPSY/W PRZYPADKU EPILEPSJI🛑" +
+                    "\nThis animation contains flashing lights and rapidly changing colors that may trigger seizures in people with photosensitive epilepsy. Viewer discretion is advised." +
+                    "\nTa animacja zawiera migające światła i szybko zmieniające się kolory, które mogą wywołać napady u osób z padaczką światłoczułą. Zalecana jest ostrożność.")
+                epilepsyWarningShown = true;
+            }
+            for (var i = 0; i < grid.length; i++) {
+                if (grid[i]) {
+                    stroke(random(360), 100, 100); // losowy kolor HSB
+                    point(grid[i].x, grid[i].y);
+                }
+            }
+            break;
+
         default:
             // --- biale kolorowanie punktow w gridzie ---
             for (var i = 0; i < grid.length; i++) {
@@ -368,8 +385,8 @@ function draw() {
 
     if (active.length === 0) { // --- jesli niema aktywnych punktow
 
-        if (loopMore === 2) {
-            noLoop(); // Zatrzymuje petla draw() gdy nie ma już aktywnych punktów
+        if (loopMore === 4) {
+            togglePause(); // Zatrzymuje petla draw() gdy nie ma już aktywnych punktów
         }
 
         loopMore++;

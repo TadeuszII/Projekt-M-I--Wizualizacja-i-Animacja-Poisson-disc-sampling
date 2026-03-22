@@ -26,7 +26,7 @@
     <div id="ui-container">
 
         <div class="control-group">
-            <button class="btn" onclick="togglePause()">Start / Pause</button>
+            <button id="btnStartPause" class="btn" onclick="togglePause()">Pause</button>
             <button class="btn" onclick="resetAlgorithm()">Reset</button>
         </div>
 
@@ -137,6 +137,7 @@
                         <option value="rainbow_fixed_pos">Rainbow (Position)</option>
                         <option value="rainbow_noise">Rainbow (Noise)</option>
                         <option value="order">Rainbow (Order of creation)</option>
+                        <option value="random">Random Colors</option>
                     </select>
                 </label>
             </fieldset>
