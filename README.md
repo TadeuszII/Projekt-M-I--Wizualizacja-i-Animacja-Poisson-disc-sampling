@@ -1,7 +1,9 @@
 # Projekt-M-I--Wizualizacja-i-Animacja-Poisson-disc-sampling
 
-Cześć! To mój projekt na zaliczenie, w którym zrobiłem wizualizację algorytmu **Poisson Disc Sampling**.
-Live demo: https://tadeuszii.github.io/Projekt-M-I--Wizualizacja-i-Animacja-Poisson-disc-sampling/
+Cześć! To mój projekt na zaliczenie, w którym zrobiłem wizualizację algorytmu **Poisson Disc Sampling**.  
+
+### [**LIVE DEMO**](https://tadeuszii.github.io/Projekt-M-I--Wizualizacja-i-Animacja-Poisson-disc-sampling/)
+
 
 
 Całą matematykę oparłem na artykule Roberta Bridsona (*Fast Poisson Disk Sampling in Arbitrary Dimensions*) - gość wymyślił, jak liczyć to szybko i prosto, więc skorzystałem z jego podejścia. Projekt napisałem w **JavaScripcie** z użyciem biblioteki **p5.js** do rysowania.
