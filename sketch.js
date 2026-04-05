@@ -33,10 +33,11 @@ var ordered = [];  // tablica przechowująca punkty w kolejności ich dodawania 
 var r = 10 // Punkty beda w promieniu 10px od siebie
 var r2 = r * r;
 var k = 20 // liczba prob przed tym jak odrzucimy punkt
-var liczba_iteracji = 50; // szybkosc animacji, im większa liczba iteracji, tym szybciej będzie się rysować, ale może być mniej płynna animacja
+var liczba_iteracji = 1; // szybkosc animacji, im większa liczba iteracji, tym szybciej będzie się rysować, ale może być mniej płynna animacja
 
 var strokeWidth = r * 0.5 // grubosc linii // --- variable for drawing ---
 
+// - GRID PARAMETERS -
 const n = 2 // liczba wymiarow (demension)
 var cellSize = r / Math.sqrt(n) // rozmiar komorki ( formula z artykulu )
 var columns; // liczba kolumn w gridzie
@@ -150,7 +151,7 @@ function initPoissonDiscSampling() // -- funckja ustawia wszstko na deffault --
     ordered = [];  // tablica przechowująca punkty w kolejności ich dodawania do gridu
 
     // - variables - 
-
+    // Step 0. Initialize an n-dimensional background grid
     cellSize = r / Math.sqrt(n) // rozmiar komorki ( formula z artykulu )
     columns = floor(width / cellSize) // liczba kolumn
     rows = floor(height / cellSize) // liczba wierszy
@@ -228,7 +229,7 @@ function draw() {
                 var column_position = floor(sample.x / cellSize); // obliczanie kolumny w gridzie
                 var row_position = floor(sample.y / cellSize); // obliczanie wiersza w gridzie
 
-                if (column_position > -1 && row_position > -1 && column_position < (columns) && row_position < (rows) && !grid[column_position + row_position * columns]) { // jeśli w gridzie jest już punkt, to odrzucamy próbę
+                if (column_position >= 0 && row_position >= 0 && column_position < columns && row_position < rows && !grid[column_position + row_position * columns]) { // jeśli w gridzie jest już punkt, to odrzucamy próbę
 
 
                     var czy_punkt_jest_ok = true; //  If a point is adequately far from existing samples
@@ -272,7 +273,7 @@ function draw() {
                         // --- Jest to dla animacji kolorowanie puntkow od kolejnosci ----
                         ordered.push(sample); // dodanie punktu do tablicy ordered
 
-                        break; // one point per frame delte to do it faster
+                        break;
                     } else {
 
                         if (document.getElementById('show-rejected').checked && active.length > 0) {
@@ -315,7 +316,7 @@ function draw() {
             // ---- Rainbow noise ----
             for (var i = 0; i < ordered.length; i++) {
                 if (ordered[i]) {
-                    stroke(i % 360, 100, 100); // kolor punktu zależny od jego indeksu w tablicy ordered
+                    stroke(i % 360, 100, 100); // randomowy ale statyczny
 
                     point(ordered[i].x, ordered[i].y); // rysowanie punktu z tablicy ordered
                 }
@@ -330,7 +331,7 @@ function draw() {
                 if (ordered[i]) {
 
                     if (i % ((customWidth + customHeight) / r) === 0) {
-                        a += 1;
+                        a += r;
                     }
 
                     var colorValue = min(a, 360);
@@ -412,7 +413,7 @@ function sketch2(p) {
         if (document.getElementById('canvas-container-2').style.display === 'block') {
 
             for (var total = 0; total < liczba_iteracji; total++) {
-                if (liczbaPunktowRandom <= 1000) {
+                if (liczbaPunktowRandom <= (columns * rows)) {
                     p.stroke(strokeColor);
                     p.point(p.random(p.width), p.random(p.height));
                     liczbaPunktowRandom++;
